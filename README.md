@@ -11,8 +11,44 @@ Preparação para Migração: Estruturar classes e métodos que possam ser facil
 
 Testes Unitários: Garantir a integridade das mecânicas através de testes automatizados (Pytest).
 
-🛠️ Tecnologias
+🏗️ Tecnologias
 
 Linguagem: Python 3.x
 
 Arquitetura: Orientação a Objetos (POO) focada em componentes.
+
+🛠️ Instalação e Execução
+
+1) Create the venv
+
+```
+python3 -m venv .venv
+```
+
+2) Activate venv
+
+No Linux
+
+```
+source .venv/bin/activate
+```
+
+No Windows
+
+```
+.\.venv\Scripts\activate
+```
+
+3) Installation of requirements
+
+```
+pip install -r requirements.txt
+```
+
+4) Run the RetroGear - Engine
+
+```
+python3 -m src.main
+```
+
+
