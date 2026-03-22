@@ -105,17 +105,17 @@ class Player:
         elif self.credits > 0:
             self.__is_broken = False
     
-    # Método responsável por manter o último action e atual
+    # The method responsible for maintaining the last and current action.
     def _set_action(self, action: PlayerAction):
          self.__last_action = self.__current_action
          self.__current_action = action
 
-    # Método responsável por manter o último state e o atual
+    # The method responsible for maintaining the last state and the current state.
     def _set_state(self, state: PlayerState):
         self.__last_state = self.__current_state
         self.__current_state = state
 
-    # Método responsável por obter a primeira mão ativa da lista de mãos
+    # The method responsible for obtaining the first active hand from the list of hands.
     def get_current_hand(self) -> Optional[Hand]:
         for hand in self.__hand_list:
             if not hand.is_sealed:
@@ -123,7 +123,7 @@ class Player:
 
         return None
     
-    # Método responsável por validar todas as mãos com base na mão do dealer
+    # The method responsible for validating all hands based on the dealer's hand.
     def play(self, dealer_hand : Hand) -> list[HandResult]:
         hand_result: list[HandResult] = []
         dealer_hand_value = dealer_hand.sum_cards()
@@ -136,27 +136,29 @@ class Player:
 
         return hand_result
     
-    # Método para validar se um jogador pode fazer deal
+    # Method to validate if a player can make a deal.
     def can_deal(self):
         return self.credits > 0
 
-    # Método para validar se o jogador pode retirar mais uma carta na mão ativa
+    # Method to validate if the player can draw another card from their active hand.
     def can_hit(self):
         current_hand = self.get_current_hand()
         return current_hand is not None and current_hand.can_play()
     
-    # Método para validar se o jogador pode fazer double na mão ativa
+    # Method to validate if the player can double up in the active hand.
     def can_double(self):
         current_hand = self.get_current_hand()
         return current_hand is not None and current_hand.can_play() and self.credits >= current_hand.deal
 
-    # Método para validar se o jogador pode fazer split na mão ativa
+    # Method to validate if the player can split in the active hand.
     def can_split(self):
         current_hand = self.get_current_hand()
         return current_hand is not None and current_hand.can_play() and current_hand.can_split() and self.credits >= current_hand.deal
 
-    # Método para fazer uma aposta, garantindo que o jogador tenha créditos suficientes 
-    # e que ele possa jogar (ou seja, tenha uma mão ativa que não esteja selada)
+    """
+        A method for placing a bet, ensuring the player has sufficient credits 
+        and is eligible to play (i.e., has an active hand that is not sealed).
+    """
     def make_deal(self, amount):
         current_hand = self.get_current_hand()
         if current_hand is None:
@@ -168,8 +170,10 @@ class Player:
         self.sub_credits(amount)
         current_hand.set_deal(amount)
 
-    # Método para fazer uma aposta de double deak, garantindo que o jogador tenha 
-    # créditos suficientes e que ele possa jogar (ou seja, tenha uma mão ativa que não esteja selada)
+    """
+        A method for placing a double deak bet, ensuring the player has sufficient credits 
+        and is eligible to play (i.e., has an active hand that is not sealed).
+    """
     def make_double_deal(self):
         current_hand = self.get_current_hand()
         if current_hand is None:
@@ -177,18 +181,18 @@ class Player:
 
         self.make_deal(current_hand.deal)
 
-    # Método para resetar o estado do jogador para o início de uma nova rodada, limpando as mãos e preparando para receber novas cartas
+    # A method to reset a player's state for the start of a new round, clearing their hand and preparing to receive new cards.
     def reset_hands(self):
         self.__hand_list: list[Hand] = []
 
-    # Método para criar uma nova mão, garantindo que o jogador não tenha mais de duas mãos (mão principal e mão dividida)
+    # A method for creating a new hand, ensuring that the player does not have more than two hands (main hand and split hand).
     def new_hand(self):
         new_hand = Hand()
         self.__hand_list.append(new_hand)
 
         return new_hand
     
-    # Método responsável por obter o ganho de todas as mãos
+    # The method responsible for securing a win for all hands.
     def get_gain(self) -> int:
         gain = 0
         for hand in self.__hand_list:
@@ -199,7 +203,7 @@ class Player:
     def receive_card(self, card : Card, hide=False):
         self.get_current_hand().add_card(card, hide=hide)
 
-    # Método responsável por fazer o deal da carta
+    # Method responsible for making the DEAL on the letter.
     def deal(self, deal: int):
         if not self.can_deal():
             raise Exception(f"Player {self.name} cannot deal your hand")
@@ -208,26 +212,26 @@ class Player:
 
         self._set_action(PlayerAction.DEAL)
 
-    # Método responsável por dar STAND na mão ativa atual
+    # The method responsible for applying STAND to the current active hand.
     def stand(self) -> bool:
         self.get_current_hand().do_stand()
 
         self._set_action(PlayerAction.STAND)
 
-    # Método responsável por dar SELATED na mão ativa atual
+    # The method responsible for setting a 'SELATED' status on the current active hand.
     def sealed(self) -> bool:
         self.get_current_hand().do_sealed()
 
         self._set_action(PlayerAction.SEALED)
 
-    # Método responsável por dar HIT na mão ativa atual
+    # The method responsible for hitting 'HIT' the current active hand.
     def hit(self):        
         if not self.can_hit():
             raise Exception(f"Player {self.name} cannot hit your hand")
 
         self._set_action(PlayerAction.HIT)
 
-    # Método responsável por dar DOUBLE na mão ativa atual
+    # The method responsible for doubling 'DOUBLE' the current active hand.
     def double(self):
         if not self.can_double():
             raise Exception(f"Player {self.name} cannot double your hand")
@@ -236,7 +240,7 @@ class Player:
 
         self._set_action(PlayerAction.DOUBLE)
 
-    # Método responsável por fazer o SPLIT da mão ativa atual
+    # The method responsible for performing the 'SPLIT' of the current active hand.
     def split(self) -> bool:
         if not self.can_split():
             raise Exception(f"Player {self.name} cannot split your hand")

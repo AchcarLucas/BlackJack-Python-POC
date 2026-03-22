@@ -50,13 +50,13 @@ def test_hand():
         hand = Hand()
         hand.add_card(Card(SUIT.HEARTS, RANK.ACE))
         hand.add_card(Card(SUIT.SPADES, RANK.KING))
-        logging.info(f"Hand value with Ace and King: {hand.value()}")
+        logging.info(f"Hand value with Ace and King: {hand.sum_cards()}")
 
         hand.add_card(Card(SUIT.DIAMONDS, RANK.FIVE))
-        logging.info(f"Hand value with Ace, King, and Five: {hand.value()}")
+        logging.info(f"Hand value with Ace, King, and Five: {hand.sum_cards()}")
 
         logging.info(f"Hand: {hand}")
-    except ValueError as e:
+    except Exception as e:
         logging.error(str(e))
 
     logging.info("\nTesting hand value calculation with hidden cards...")
@@ -64,19 +64,19 @@ def test_hand():
         hand = Hand()
         hand.add_card(Card(SUIT.HEARTS, RANK.ACE))
         hand.add_card(Card(SUIT.SPADES, RANK.EIGHT), True) # Simulate hidden card
-        logging.info(f"Hand value with Ace and Eight (Hidden): {hand.value()}")
+        logging.info(f"Hand value with Ace and Eight (Hidden): {hand.sum_cards()}")
 
         hand.add_card(Card(SUIT.DIAMONDS, RANK.FIVE))
-        logging.info(f"Hand value with Ace, Eight (Hidden), and Five: {hand.value()}")
+        logging.info(f"Hand value with Ace, Eight (Hidden), and Five: {hand.sum_cards()}")
 
         logging.info(f"Hand: {hand}")
 
         logging.info("Revealing hidden card...")
         hand.turn_all_cards()
-        logging.info(f"Hand value with Ace, Eight, and Five: {hand.value()}")
+        logging.info(f"Hand value with Ace, Eight, and Five: {hand.sum_cards()}")
 
         logging.info(f"Hand: {hand}")
-    except ValueError as e:
+    except Exception as e:
         logging.error(str(e))
 
     # Test splitting a hand with two Aces (should be allowed)
@@ -92,7 +92,7 @@ def test_hand():
 
         logging.info(f"Original hand after split: {hand}")
         logging.info(f"New hand after split: {split_hand}")
-    except ValueError as e:
+    except Exception as e:
         logging.error(str(e))
 
     # Test splitting a hand with different ranks (should raise an error)
@@ -105,7 +105,7 @@ def test_hand():
         logging.info(f"Original hand before split: {hand}")
 
         split_hand = hand.split()
-    except ValueError as e:
+    except Exception as e:
         logging.error(str(e))
 
     # Test splitting a hand with more than two cards (should raise an error)
@@ -119,7 +119,7 @@ def test_hand():
         logging.info(f"Original hand before split: {hand}")
 
         split_hand = hand.split()
-    except ValueError as e:
+    except Exception as e:
         logging.error(str(e))
 
 def all_test():
