@@ -168,7 +168,7 @@ class Player:
             raise Exception(f"Player {self.name} does not have enough credits to make a deal of {amount}. Current credits: {self.credits}")
 
         self.sub_credits(amount)
-        current_hand.set_deal(amount)
+        current_hand.add_deal(amount)
 
     """
         A method for placing a double deak bet, ensuring the player has sufficient credits 
@@ -246,9 +246,10 @@ class Player:
             raise Exception(f"Player {self.name} cannot split your hand")
         
         current_hand = self.get_current_hand()
-        self.sub_credits(current_hand.deal)
 
         new_hand = current_hand.split()
+
+        self.sub_credits(current_hand.deal)
         new_hand.set_deal(current_hand.deal)
 
         self.__hand_list.append(new_hand)
