@@ -3,6 +3,12 @@
 Python Game Logic POC (Core Engine for Godot)
 Esta é uma Prova de Conceito (POC) desenvolvida em Python para validar as mecânicas fundamentais e a lógica de sistemas de um futuro jogo no Godot Engine. O objetivo é garantir que as regras de negócio, cálculos matemáticos e fluxos de dados estejam sólidos antes da implementação da camada visual e de interface na engine.
 
+## 🖼️ Preview do Projeto
+
+| Interface de Testes 1 | Interface de Testes 2 |
+| :---: | :---: |
+| ![Blackjack Preview 1](images/blackjack_1.png) | ![Blackjack Preview 2](images/blackjack_2.png) |
+
 # 🎯 Objetivos desta POC
 
 Core Logic Decoupling: Desenvolver uma lógica de jogo 100% independente de bibliotecas gráficas.
