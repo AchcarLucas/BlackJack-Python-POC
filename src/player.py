@@ -89,13 +89,14 @@ class Player:
     def is_broken(self) -> bool:
         return self.__is_broken
     
-    # Adiciona créditos ao jogador
+    # Adds credits to the player.
     def add_credits(self, credits):
         self.__credits += credits
 
         if self.credits > 0:
             self.__is_broken = False
 
+    # Subtracts credits from the player.
     def sub_credits(self, credits):
         self.__credits -= credits
 
@@ -120,7 +121,6 @@ class Player:
         for hand in self.__hand_list:
             if not hand.is_sealed:
                 return hand
-
         return None
     
     # The method responsible for validating all hands based on the dealer's hand.

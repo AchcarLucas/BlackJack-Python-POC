@@ -15,18 +15,18 @@ class HandResult(Enum):
 
 class Hand:
     """
-        Classe que representa a mão de um jogador ou do dealer, contendo os cartões na mão, o valor da aposta (deal), 
-        o resultado da mão e flags para indicar se a mão está selada ou dividida.
+        A class representing a player's or dealer's hand, containing the cards in hand, the bet amount (deal), 
+        the hand's outcome, and flags to indicate whether the hand is sealed or split.
     """
     def __init__(self):
         self.hand_cards = []
         self._deal = 0
         self._result : Optional[HandResult] = None
 
-        # Flag que indica que a mão esta selada (já fez a jogada)
+        # A flag indicating that the hand is sealed (the play has already been made).
         self.__is_sealed = False
 
-        # Flag que indica que a mão esta em estado stand
+        # Flag indicating that the hand is in stand mode.
         self.__is_stand = False
 
         # flag to indicate if the hand has been split (used for players who split their hand into two separate hands)
@@ -68,7 +68,7 @@ class Hand:
 
     # Method to check if it's possible to play with the hand
     def can_play(self) -> bool:
-        # Uma mão pode jogar se ela não estiver selada e o valor total da mão for menor que 21
+        # A hand can be played if it is not sealed and the total value of the hand is less than 21.
         return not self.is_sealed and not self.__is_stand and self.sum_cards() < 21 and self.result is None
     
     """

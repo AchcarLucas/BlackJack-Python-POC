@@ -97,7 +97,7 @@ class BlackJack():
         for player in self.__players:
             player_hand = player.get_current_hand()
 
-            # Ignora jogador sem mão ativa
+            # Ignore player without active hand.
             if player_hand is None:
                 continue
 
@@ -133,6 +133,7 @@ class BlackJack():
                 player.receive_card(card=self.__pack.pop(), hide=False)
                 logging.info(f" - Player {player.name} HIT with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
             elif action == PlayerAction.DOUBLE:
+                # Receive a card from the pack and add it to the player's hand, then print the new hand of the player
                 player.receive_card(card=self.__pack.pop(), hide=False)
                 logging.info(f" - Player {player.name} DOUBLE down with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
             elif action == PlayerAction.SPLIT:
@@ -149,15 +150,16 @@ class BlackJack():
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.DEALER_TURN)
 
+    # State machine to dealer turn
     async def dealer_turn(self):
         dealer_hand = self.__dealer.get_current_hand()
 
-        # Revela todas as cartas
+        # Reveal all the cards
         dealer_hand.turn_all_cards()
 
         logging.info(f" - Dealer {self.__dealer.name} with hand: {dealer_hand} - SUM: {dealer_hand.sum_cards()} (Open Hidden)")
 
-        # Faz a jogada do dealer considerando sua lógica interna
+        # Make the dealer's move considering your internal logic.
         while True:
             result = await self.__dealer.run(PlayerState.PLAYING)
             if result is PlayerAction.STAND:
@@ -170,16 +172,17 @@ class BlackJack():
                 logging.info("Dealer HIT")
                 continue
 
-        # Valida os players e todas as suas mãos conforme o resultado do dealer
+        # Validates the players and all their hands according to the dealer's result.
         for player in self.__players:
             hand_result: list[HandResult] = player.play(self.__dealer.get_current_hand())
-            # obter ganho e adicionar como crédito
+            # Earn money win and add it as credit.
             player.add_credits(player.get_gain())
             logging.info(f"{ColorText.AMARELO}Player: {player.name} - Hand: {hand_result}{ColorText.RESET}")
         
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.END_TURN)
 
+    # State machine to End Turn
     async def end_turn(self):
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.WAITING_PLAYERS)
