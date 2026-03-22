@@ -27,6 +27,7 @@ class BlackJack():
     def __init__(self, num_decks=3, num_players=2):
         self.__num_decks = num_decks
         self.__num_players = num_players
+
         self.__pack : Pack = None
         self.__game_state: GameState = GameState.WAITING_PLAYERS
         
@@ -42,7 +43,7 @@ class BlackJack():
     def _get_game_state(self) -> GameState:
         return self.__game_state
 
-    # Método para criar um novo pacote de cargas quando necessário
+    # Method for creating a new card pack when needed.
     async def new_pack(self):
         # se existir menos que um pacote de cartas, criamos um novo pacote
         if self.__pack is None or len(self.__pack) < 52:
@@ -66,6 +67,7 @@ class BlackJack():
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.START_TURN)
 
+    # State machine to start turn, create pack e initial turn configuration
     async def start_turn(self):
         await self.new_pack()
         await self.new_turn()
@@ -73,6 +75,7 @@ class BlackJack():
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.WAITING_DEALING)
 
+    # State machine to waiting dealing
     async def waiting_dealing(self):
         # WAITING_DEALING It can be synchronized with all players. When all players are ready, we can start dealing the cards.
         # For now, we will just wait for a short time to simulate the waiting time for players to be ready.
@@ -82,6 +85,7 @@ class BlackJack():
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.DEALING_CARDS)
 
+    # State machine to dealing card
     async def dealing_cards(self):
         self.__dealer.receive_card(card=self.__pack.pop(), hide=True)
         self.__dealer.receive_card(card=self.__pack.pop(), hide=False)
@@ -105,15 +109,16 @@ class BlackJack():
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.PLAYER_TURN)
 
+    # State machine for player moves
     async def player_turn(self):
         for player in self.__players:
             player_hand = player.get_current_hand()
 
-            # Ignora jogador sem mão ativa
+            # Ignore player without active hand.
             if player_hand is None:
                 continue
 
-            # Se o player já tiver em STAND, apenas passamos a vez dele
+            # If the player is already in STAND mode, we simply pass their turn.
             if  player_hand is not None and \
                 not player_hand.can_play():
                 continue
@@ -133,7 +138,7 @@ class BlackJack():
             elif action == PlayerAction.SPLIT:
                 logging.info(f" - Player {player.name} SPLIT with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
 
-        # Verifica se algum jogador ainda pode jogar, se sim, volta para o estado de 'player_turn'
+        # Checks if any player can still play, if so, returns to the 'player_turn' state.
         for player in self.__players:
              player_hand = player.get_current_hand()
              if player_hand is not None and \

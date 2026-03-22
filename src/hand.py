@@ -56,30 +56,37 @@ class Hand:
     def result(self) -> Optional[HandResult]:
         return self._result
     
-    # Método responsável por selar a mão, indicando que o jogador decidiu ficar com a mão atual e não 
-    # receberá mais cartas, definindo a flag de mão selada como True
+    """
+        This method seals the hand, indicating that the player has decided to keep their current hand 
+        and will not receive any more cards, setting the sealed hand flag to True.
+    """
     def do_stand(self):
         self.__is_stand = True
 
     def do_sealed(self):
         self.__is_sealed = True
 
-    # Método para verificar se é possível jogar com a mão
+    # Method to check if it's possible to play with the hand
     def can_play(self) -> bool:
         # Uma mão pode jogar se ela não estiver selada e o valor total da mão for menor que 21
         return not self.is_sealed and not self.__is_stand and self.sum_cards() < 21 and self.result is None
     
-    # Verifica se a mão pode ser dividida, o que é possível apenas se houver exatamente dois cartões 
-    # e ambos forem do mesmo valor, e a mão ainda não tiver sido dividida ou selada
+    """
+        Check if the hand can be split, which is only possible if there are exactly 
+        two cards and both are of the same value, and the hand has not yet been split or sealed.
+    """
     def can_split(self) -> bool:
         if self.can_play() is False or (len(self.hand_cards) != 2) or (self.is_split):
             return False
 
         return self.hand_cards[0]['card'].rank == self.hand_cards[1]['card'].rank
 
-    # Método para jogar a mão, comparando o valor da mão do jogador com o valor da mão do dealer para 
-    # determinar o resultado (ganhou, perdeu, empate ou blackjack), e definindo o resultado da 
-    # mão de acordo com as regras do jogo
+
+    """
+        A method for playing a hand, comparing the value of the player's hand with the value of the 
+        dealer's hand to determine the outcome (win, lose, tie, or blackjack), and defining the hand's 
+        result according to the rules of the game
+    """
     def play(self, dealer_hand_value : int):
         if self.is_sealed is False:
             raise Exception("Cannot play a hand that is not sealed.")
@@ -100,7 +107,7 @@ class Hand:
         else:
             self._result = HandResult.LOST
 
-    # Método para calcular o ganho da mão com base no resultado
+    # Method for calculating hand winnings based on the result.
     def get_gain(self) -> int:
         if self.is_sealed is False:
             raise Exception("Cannot calculate gain for a hand that is not sealed.")
@@ -117,7 +124,7 @@ class Hand:
         elif self.result is HandResult.LOST:
             return 0
 
-    # Método para definir o valor da aposta (deal) para a mão
+    # Method for determining the deal value for a hand.
     def set_deal(self, deal: int):
         if self.result is not None:
             raise Exception("Cannot make a deal on a hand that already has a result.")
@@ -127,62 +134,68 @@ class Hand:
         self._deal = deal
         return self._deal
 
-    # Método para adicionar um valor à aposta (deal) atual
+    # Method for adding value to the current bet (deal)
     def add_deal(self, deal: int):
         return self.set_deal(self._deal + deal)
 
-    # Adiciona uma carta à mão, verificando se a mão não está selada para permitir a adição de cartas, e armazenando a carta junto com a informação de se ela está oculta ou não
+    """
+        Adds a card to the hand, checking that the hand is not play to allow the addition of cards, 
+        and storing the card along with information on whether it is face down or not.
+    """
     def add_card(self, card: Card, hide: bool = False):
         if self.can_play() is False:
             raise ValueError("Cannot add cards to a hand, you cannot play this hand.")
 
         self.hand_cards.append({'card': card, 'hide': hide})
 
-    # Revela uma carta específica na mão, definindo o atributo 'hide' da carta como False, para mostrar o valor da carta oculta
+    # Reveals a specific card in hand by setting the card's 'hide' attribute to False, to show the value of the hidden card.
     def turn_card(self, index: int):
         if index < 0 or index >= len(self.hand_cards):
             raise IndexError("Card index out of range")
 
         self.hand_cards[index]['hide'] = False
 
-    # Revela todas as cartas da mão, definindo o atributo 'hide' de cada carta como False, para mostrar o valor de todas as cartas na mão
+    # Reveals all cards in hand by setting each card's 'hide' attribute to False, to show the value of all cards in hand.
     def turn_all_cards(self):
         for hand_card in self.hand_cards:
             hand_card['hide'] = False
 
-    # Método responsável por dividir a mão em duas mãos separadas, movendo um dos cartões para a nova mão e marcando a mão original como dividida
+    # This method involves splitting the hand into two separate hands, moving one of the cards to the new hand, and marking the original hand as split.
     def split(self) -> Hand:
         if self.can_split() is False:
             raise Exception("Can only split with exactly two cards or if the hand has already been split")
         
         self.__is_split = True
 
-        # Remove um cartão da mão original para criar a nova mão
+        # Remove a card from the original hand to create the new hand.
         hand_card = self.hand_cards.pop()
 
-        # Cria uma mão nova para a divisão, adicionando o cartão removido da mão original para a nova mão
+        # Creates a new hand for the split, adding the card removed from the original hand to the new hand.
         new_hand = Hand()
         new_hand.add_card(hand_card.get('card'), hide=hand_card.get('hide'))
 
         return new_hand
     
-    # Calculula o valor total da mão, não em consideração as cartas ocultas e os Aces, que podem valer 1 ou 11 pontos dependendo do total da mão
+    """
+        It calculates the total value of the hand, not taking into account hidden cards and Aces,
+        which can be worth 1 or 11 points depending on the total hand value.
+    """
     @abstractmethod
     def sum_cards(self) -> int:
         sum : int = 0
         aces : int = 0
 
         for card, hide in (e.values() for e in self.hand_cards):
-            # Se a carta estiver oculta, não a conte para o total da mão
+            # If the card is face down, do not count it towards the hand total.
             if not hide:
                 sum += card.value()
-                # Se a carta for um Ace, conte quantos Aces temos para ajustar o valor da mão
+                # If the card is an Ace, count how many Aces you have to adjust the hand value.
                 if card.rank == RANK.ACE:
                     aces += 1
 
-        # Ajusta o valor da mão para contar os Aces como 1 ponto em vez de 11 se o total ultrapassar 21
+        # Adjust the hand value to count Aces as 1 point instead of 11 if the total exceeds 21.
         while sum > 21 and aces > 0:
-            sum -= 10  # Conta um Ace como 1 ponto em vez de 11
+            sum -= 10  # Count an Ace as 1 point instead of 11.
             aces -= 1
 
         return sum
