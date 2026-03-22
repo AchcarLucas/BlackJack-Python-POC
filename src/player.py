@@ -118,9 +118,15 @@ class Player:
 
     # The method responsible for obtaining the first active hand from the list of hands.
     def get_current_hand(self) -> Optional[Hand]:
+        # The dealer only has one hand, he can't split the deal.
+        if self.is_dealer:
+            return self.__hand_list[0]
+
+        # Other players continue with the same logic.
         for hand in self.__hand_list:
-            if not hand.is_sealed:
+            if hand.can_play():
                 return hand
+
         return None
     
     # The method responsible for validating all hands based on the dealer's hand.
@@ -143,17 +149,24 @@ class Player:
     # Method to validate if the player can draw another card from their active hand.
     def can_hit(self):
         current_hand = self.get_current_hand()
-        return current_hand is not None and current_hand.can_play()
+        return  current_hand is not None and \
+                current_hand.can_play()
     
     # Method to validate if the player can double up in the active hand.
     def can_double(self):
         current_hand = self.get_current_hand()
-        return current_hand is not None and current_hand.can_play() and self.credits >= current_hand.deal
+        return  current_hand is not None \
+                and current_hand.can_play() and \
+                self.credits >= current_hand.deal
 
     # Method to validate if the player can split in the active hand.
     def can_split(self):
         current_hand = self.get_current_hand()
-        return current_hand is not None and current_hand.can_play() and current_hand.can_split() and self.credits >= current_hand.deal
+        return  current_hand is not None and \
+                current_hand.can_play() and \
+                current_hand.can_split() and \
+                self.credits >= current_hand.deal and \
+                not self.is_dealer
 
     """
         A method for placing a bet, ensuring the player has sufficient credits 

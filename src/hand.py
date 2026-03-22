@@ -69,7 +69,10 @@ class Hand:
     # Method to check if it's possible to play with the hand
     def can_play(self) -> bool:
         # A hand can be played if it is not sealed and the total value of the hand is less than 21.
-        return not self.is_sealed and not self.__is_stand and self.sum_cards() < 21 and self.result is None
+        return  not self.is_sealed and \
+                not self.is_stand and \
+                self.sum_cards() < 21 and \
+                self.result is None
     
     """
         Check if the hand can be split, which is only possible if there are exactly 

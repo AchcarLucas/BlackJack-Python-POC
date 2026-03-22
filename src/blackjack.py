@@ -104,7 +104,7 @@ class BlackJack():
             player.receive_card(card=self.__pack.pop())
             player.receive_card(card=self.__pack.pop())
 
-            logging.info(f"Player {player.name} hand: {player.get_current_hand()}")
+            logging.info(f"Player {player.name} hand({id(player_hand)}): {player_hand}")
 
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.PLAYER_TURN)
@@ -124,20 +124,20 @@ class BlackJack():
                 continue
 
             logging.info(f"Player {player.name} turn...")
-            logging.info(f" - Player {player.name} with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
+            logging.info(f" - Player {player.name} with hand({id(player_hand)}): {player_hand} - SUM: {player_hand.sum_cards()}")
             action = await player.run(PlayerState.PLAYING)
             if action == PlayerAction.STAND:
-                logging.info(f" - Player {player.name} STAND with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
+                logging.info(f" - Player {player.name} STAND with hand({id(player_hand)}): {player_hand} - SUM: {player_hand.sum_cards()}")
             elif action == PlayerAction.HIT:
                 # Receive a card from the pack and add it to the player's hand, then print the new hand of the player
                 player.receive_card(card=self.__pack.pop(), hide=False)
-                logging.info(f" - Player {player.name} HIT with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
+                logging.info(f" - Player {player.name} HIT with hand({id(player_hand)}): {player_hand} - SUM: {player_hand.sum_cards()}")
             elif action == PlayerAction.DOUBLE:
                 # Receive a card from the pack and add it to the player's hand, then print the new hand of the player
                 player.receive_card(card=self.__pack.pop(), hide=False)
-                logging.info(f" - Player {player.name} DOUBLE down with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
+                logging.info(f" - Player {player.name} DOUBLE down with hand({id(player_hand)}): {player_hand} - SUM: {player_hand.sum_cards()}")
             elif action == PlayerAction.SPLIT:
-                logging.info(f" - Player {player.name} SPLIT with hand: {player_hand} - SUM: {player_hand.sum_cards()}")
+                logging.info(f" - Player {player.name} SPLIT with hand({id(player_hand)}): {player_hand} - SUM: {player_hand.sum_cards()}")
 
         # Checks if any player can still play, if so, returns to the 'player_turn' state.
         for player in self.__players:
