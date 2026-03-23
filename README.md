@@ -17,8 +17,6 @@ Prototipagem de Algoritmos: Validar sistemas de [Ex: decisão da i.a, decisão d
 
 Preparação para Migração: Estruturar classes e métodos que possam ser facilmente traduzidos para GDScript ou implementados via GDExtension.
 
-Testes Unitários: Garantir a integridade das mecânicas através de testes automatizados (Pytest).
-
 # 🏗️ Tecnologias
 
 Linguagem: Python 3.x
