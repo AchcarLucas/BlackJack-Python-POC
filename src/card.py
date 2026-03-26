@@ -60,7 +60,8 @@ class Card:
             return 11
         else:
             return int(self.rank.value)
-        
+
+    # Modifies the returned value for display purposes only.
     def __value(self):
         value = self.value()
         return f"({value})" if value != 11 else f"({value}, 1)"
