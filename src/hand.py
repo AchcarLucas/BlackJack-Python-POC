@@ -119,7 +119,7 @@ class Hand:
             raise Exception("Cannot calculate gain for a hand that does not have a result.")
 
         if self.result is HandResult.BLACKJACK:
-            return self.deal * 2.5
+            return self.deal * 3
         elif self.result is HandResult.WON:
             return self.deal * 2
         elif self.result is HandResult.PUSH:
