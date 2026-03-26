@@ -172,18 +172,18 @@ class BlackJack():
                 logging.info("Dealer HIT")
                 continue
 
-        # Validates the players and all their hands according to the dealer's result.
-        for player in self.__players:
-            hand_result: list[HandResult] = player.play(self.__dealer.get_current_hand())
-            # Earn money win and add it as credit.
-            player.add_credits(player.get_gain())
-            logging.info(f"{ColorText.AMARELO}Player: {player.name} - Hand: {hand_result}{ColorText.RESET}")
-        
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.END_TURN)
 
     # State machine to End Turn
     async def end_turn(self):
+         # Validates the players and all their hands according to the dealer's result.
+        for player in self.__players:
+            hand_result: list[HandResult] = player.play(self.__dealer.get_current_hand())
+            # Earn money win and add it as credit.
+            player.add_credits(player.get_gain())
+            logging.info(f"{ColorText.AMARELO}Player: {player.name} - Hand: {hand_result}{ColorText.RESET}")
+
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.WAITING_PLAYERS)
 
