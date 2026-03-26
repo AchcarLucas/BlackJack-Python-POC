@@ -13,7 +13,7 @@ class DealerPlayer(Player):
         elif state is PlayerState.DEALING:
             return PlayerAction.DEAL
         elif state is PlayerState.PLAYING:
-            # Regra do dealer
+            # Dealer Rule
             hand_value = self.get_current_hand().sum_cards()
             if hand_value < 17:
                 self.hit()
