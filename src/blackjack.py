@@ -34,8 +34,13 @@ class BlackJack():
         self.__players : list[Player] = []
 
         self.__dealer = DealerPlayer('dealer', credits=0, dealer=True)
+
         self.__players.insert(-1, HumanPlayer('HUMAN', credits=1000))
-        self.__players.insert(-1, IAPlayer('I.A', credits=1000))
+
+        self.__players.insert(-1, IAPlayer('I.A (1)', credits=1000))
+        self.__players.insert(-1, IAPlayer('I.A (2)', credits=1000))
+        self.__players.insert(-1, IAPlayer('I.A (3)', credits=1000))
+        self.__players.insert(-1, IAPlayer('I.A (4)', credits=1000))
 
     def _set_game_state(self, state: GameState):
         self.__game_state = state
