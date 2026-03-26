@@ -16,6 +16,8 @@ if __name__ == "__main__":
     
     blackjack = BlackJack(num_decks=3, num_players=2)
 
+    logging.info("-" * 80)
     logging.info("Starting BlackJack...")
+    logging.info("-" * 80)
     asyncio.run(blackjack.play())
     logging.info("Game finished!")

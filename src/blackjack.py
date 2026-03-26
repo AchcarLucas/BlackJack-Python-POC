@@ -187,7 +187,8 @@ class BlackJack():
             hand_result: list[HandResult] = player.play(self.__dealer.get_current_hand())
             # Earn money win and add it as credit.
             player.add_credits(player.get_gain())
-            logging.info(f"{ColorText.AMARELO}Player: {player.name} - Hand: {hand_result}{ColorText.RESET}")
+
+            logging.info(f"{ColorText.VERDE if player.get_gain() > 0 else ColorText.VERMELHO}Player: {player.name} - Hand: {hand_result}{ColorText.RESET}")
 
         await asyncio.sleep(0.25)
         self._set_game_state(GameState.WAITING_PLAYERS)
@@ -196,25 +197,25 @@ class BlackJack():
         while True:
             match self._get_game_state():
                 case GameState.WAITING_PLAYERS:
-                    logging.info("Waiting for players to be ready...")
+                    logging.info(f"{ColorText.BG_AMARELO}Waiting for players to be ready...{ColorText.RESET}")
                     await self.waiting_players()
                 case GameState.START_TURN:
-                    logging.info("Starting new turn...")
+                    logging.info(f"{ColorText.BG_AMARELO}Starting new turn...{ColorText.RESET}")
                     await self.start_turn()
                 case GameState.WAITING_DEALING:
-                    logging.info("Starting dealing...")
+                    logging.info(f"{ColorText.BG_AMARELO}Starting dealing...{ColorText.RESET}")
                     await self.waiting_dealing()
                 case GameState.DEALING_CARDS:
-                    logging.info("Dealing cards for players and dealer...")
+                    logging.info(f"{ColorText.BG_AMARELO}Dealing cards for players and dealer...{ColorText.RESET}")
                     await self.dealing_cards()
                 case GameState.PLAYER_TURN:
-                    logging.info("Starting player's turn...")
+                    logging.info(f"{ColorText.BG_AMARELO}Starting player's turn...{ColorText.RESET}")
                     await self.player_turn()
                 case GameState.DEALER_TURN:
-                    logging.info("Starting dealer's turn...")
+                    logging.info(f"{ColorText.BG_AMARELO}Starting dealer's turn...{ColorText.RESET}")
                     await self.dealer_turn()
                 case GameState.END_TURN:
-                    logging.info("Round ended, calculating results...")
+                    logging.info(f"{ColorText.BG_AMARELO}Round ended, calculating results...{ColorText.RESET}")
                     await self.end_turn()   
         
 
